@@ -25,91 +25,67 @@ GO
 
 CREATE SCHEMA CW1;
 
+
 /*3) CREATE TABLES IN SCHEMA "CW1" IN "TrailDB"*/
 
-CREATE TABLE CW1.AppUser(
-    user_id INT PRIMARY KEY,
-    user_name VARCHAR(60),
-    user_email VARCHAR(60) NOT NULL UNIQUE,
-    user_password VARCHAR(60) NOT NULL
+CREATE TABLE CW1.Users(
+    user_id INT IDENTITY(1, 1) PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL,
+    user_email VARCHAR(200) NOT NULL UNIQUE,
+    user_password VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE CW1.Location(
-    location_id INT,
-    country VARCHAR(40) NOT NULL,
-    state VARCHAR(40) NOT NULL,
-    city VARCHAR(40) NOT NULL
+CREATE TABLE CW1.Geographical_Info(
+    geographical_id INT IDENTITY(1, 1) PRIMARY KEY,
+    trail_longitude FLOAT NOT NULL,
+    trail_latitude FLOAT NOT NULL
+);
+
+CREATE TABLE CW1.Trail_Location(
+    location_id INT IDENTITY(1,1) PRIMARY KEY,
+    geographical_id INT,
+    location_name VARCHAR(150) NOT NULL,
+    country VARCHAR(150) NOT NULL,
+    state VARCHAR(150) NOT NULL,
+    city VARCHAR(150) NOT NULL,
+    FOREIGN KEY (geographical_id) REFERENCES CW1.Geographical_Info(geographical_id)
 );
 
 CREATE TABLE CW1.Trail(
-    trail_id INT PRIMARY KEY,
-    location_id INT,
-    trail_name VARCHAR(60) NOT NULL,
-    length INT NOT NULL,
-    elevation_gain VARCHAR(60) NOT NULL,
+    trail_id INT IDENTITY(1, 1) PRIMARY KEY,
+    location_id INT NOT NULL,
+    user_id INT NOT NULL,
     estimated_time_min TIME NOT NULL,
     estimated_time_max TIME NOT NULL,
     route_type VARCHAR(60) NOT NULL,
-    difficulty VARCHAR(60) NOT NULL
-);
-
-CREATE TABLE CW1.TrailFeatures(
-    feature_id INT PRIMARY KEY,
-    trail_id INT,
-    feature_name VARCHAR(60) NOT NULL
-);
-
-CREATE TABLE CW1.TrailSights(
-    sights_id INT PRIMARY KEY,
-    trail_id INT,
-    top_sight_name VARCHAR(60) NOT NULL
-);
-
-CREATE TABLE CW1.TrailSpecifications(
-    trail_info_id INT PRIMARY KEY,
-    trail_id INT,
-    trail_info VARCHAR(60) NOT NULL
-);
-
-CREATE TABLE CW1.Features(
-    feature_id INT PRIMARY KEY,
-    feature_name VARCHAR(60) NOT NULL
+    difficulty VARCHAR(60) NOT NULL,
+    trail_name VARCHAR(100) NOT NULL,
+    elevation_gain INT NOT NULL,
+    length DECIMAL(5,2) NOT NULL,
+    FOREIGN KEY (location_id) REFERENCES CW1.Trail_Location(location_id),
+    FOREIGN KEY (user_id) REFERENCES CW1.Users(user_id)
 );
 
 CREATE TABLE CW1.Sights(
-    sights_id INT PRIMARY KEY,
-    top_sight_name VARCHAR(60) NOT NULL
+    sights_id INT IDENTITY(1, 1) PRIMARY KEY,
+    top_sight_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE CW1.Specifications(
-    trail_info_id INT PRIMARY KEY,
-    trail_info VARCHAR(60) NOT NULL
+CREATE TABLE CW1.Trail_Sights(
+    sights_id INT NOT NULL,
+    trail_id INT NOT NULL,
+    PRIMARY KEY (sights_id, trail_id),
+    FOREIGN KEY (sights_id) REFERENCES CW1.Sights(sights_id) ON DELETE CASCADE,
+    FOREIGN KEY (trail_id) REFERENCES CW1.Trail(trail_id) ON DELETE CASCADE
 );
 
-/*3) ALTER IN MISSING FOREIGN AND PRIMARY KEY CONTRAINTS*/
-
-ALTER TABLE CW1.Location
-ADD CONSTRAINT PK_Location_ID PRIMARY KEY (location_id);
-ALTER TABLE CW1.Trail
-ADD CONSTRAINT FK_Trail_Location FOREIGN KEY (location_id) REFERENCES CW1.Location (location_id);
-
-
-ALTER TABLE CW1.TrailFeatures
-ADD CONSTRAINT FK_Feature_ID FOREIGN KEY (feature_id) REFERENCES CW1.Features(feature_id);
-ALTER TABLE CW1.TrailFeatures
-ADD CONSTRAINT FK_Trail_ID FOREIGN KEY (trail_id) REFERENCES CW1.Trail(trail_id);
-
-
-ALTER TABLE CW1.TrailSights
-ADD CONSTRAINT FK_Sights_ID FOREIGN KEY (sights_id) REFERENCES CW1.Sights(sights_id);
-ALTER TABLE CW1.TrailSights
-ADD CONSTRAINT FK_Trail_ID FOREIGN KEY (trail_id) REFERENCES CW1.Trail(trail_id);
-
-ALTER TABLE CW1.TrailSpecifications
-ADD CONSTRAINT FK_Specifications_ID FOREIGN KEY (trail_info_id) REFERENCES CW1.TrailSpecifications(trail_info_id);
-ALTER TABLE CW1.TrailSpecifications
-ADD CONSTRAINT FK_Trail_ID FOREIGN KEY (trail_id) REFERENCES CW1.Trail(trail_id);
-
-
-
+CREATE TABLE CW1.Rating(
+    rating_id INT IDENTITY(1, 1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    trail_id INT NOT NULL,
+    review_text VARCHAR(8000) NOT NULL,
+    star_rating INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES CW1.Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (trail_id) REFERENCES CW1.Trail(trail_id) ON DELETE CASCADE
+);
 
