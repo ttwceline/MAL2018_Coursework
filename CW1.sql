@@ -144,3 +144,38 @@ SELECT * FROM CW1.Rating;
 SELECT * FROM CW1.Users WHERE user_name LIKE 'A%'; 
 SELECT * FROM CW1.Rating WHERE star_rating = 5;
 SELECT * FROM CW1.Sights ORDER BY top_sight_name ASC;
+
+/*6. CREATING VIEW*/
+CREATE VIEW CW1.TrailCreatedBy AS
+SELECT 
+    CW1.Trail.trail_name,
+    CW1.Trail_Location.location_name,
+    CW1.Users.user_name
+FROM CW1.Trail
+JOIN CW1.Trail_Location
+    ON CW1.Trail.location_id = CW1.Trail_Location.location_id
+JOIN CW1.Users  
+    ON CW1.Trail.user_id = CW1.Users.user_id;
+
+SELECT * FROM CW1.TrailCreatedBy;
+
+CREATE VIEW CW1.SpecificTrailLocationInfo AS
+SELECT 
+    CW1.Trail.trail_name,
+    CW1.Geographical_Info.trail_latitude,
+    CW1.Geographical_Info.trail_longitude,
+    CW1.Trail_Location.country,
+    CW1.Trail_Location.state,
+    CW1.Trail_Location.city,
+    CW1.Sights.top_sight_name
+FROM CW1.Trail
+JOIN CW1.Trail_Location
+    ON CW1.Trail.location_id = CW1.Trail_Location.location_id
+JOIN CW1.Geographical_Info
+    ON CW1.Trail_Location.geographical_id = CW1.Geographical_Info.geographical_id
+JOIN CW1.Trail_Sights
+    ON CW1.Trail.trail_id = CW1.Trail_Sights.trail_id
+JOIN CW1.Sights
+    ON CW1.Trail_Sights.sights_id = CW1.Sights.sights_id;
+
+SELECT * FROM CW1.SpecificTrailLocationInfo;
