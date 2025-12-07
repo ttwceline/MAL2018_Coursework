@@ -1,4 +1,5 @@
-# MAL2018_CW1
+# MAL2018_Coursework
+
 MAL2018: Information Management and Retrieval Coursework 1
 BSCS2509249 
 
