@@ -1,1 +1,24 @@
+{
+  "trail_name": "string",
+  "trail_description": "string “,
+  "difficulty": “string",
+  "city": "string",
+  "state": "string",
+  "country": "string",
+  "length": "float",
+  "route_type": "string", 
+  "trailowner_id": int,
+  "points": [
+    {
+      "trail_latitude": float,
+      "trail_longitude": float,
+      "trail_sequence": int
+    },
+    {
+      "trail_latitude": float,
+      "trail_longitude": float,
+      "trail_sequence": int
+    }
+  ]
+}
 
