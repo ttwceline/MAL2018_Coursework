@@ -15,3 +15,8 @@ In this repository, it includes the .sql file that does the following:
 9. PROCEDURES functionality testing.
 10. Creating Log table.
 11. Creating a trigger for the time log when a trail is added.
+
+MAL2018: Information Management and Retrieval Coursework 2
+1. Creating CW2 Schema.
+2. Creating Tables for CW2.
+3. Python Code Lines for Swagger UI, OpenAPI
