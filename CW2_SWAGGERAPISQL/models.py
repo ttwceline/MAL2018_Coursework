@@ -73,13 +73,14 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 
 class TrailSchema(ma.SQLAlchemyAutoSchema):
     points = fields.Nested(TrailLocationPointSchema, many=True)
-    owner = fields.Nested(UserSchema, only=("username", "role"))
+    owner = fields.Nested(UserSchema, only=("username", "role"), dump_only=True)
 
     class Meta:
         model = Trail
         load_instance = True
         sqla_session = db.session
         include_relationships = True
+        include_fk = True
 
 trail_schema = TrailSchema()
 trails_schema = TrailSchema(many=True)
